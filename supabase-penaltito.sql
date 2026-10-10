@@ -23,3 +23,14 @@ create policy "pt_reto ler" on pt_reto for select using (true);
 drop policy if exists "pt_reto engadir" on pt_reto;
 create policy "pt_reto engadir" on pt_reto for insert
   with check (dia between current_date - 1 and current_date + 1);
+
+-- ===== Para ver o ranking dende outras webs (por exemplo, "cagando") =====
+-- Vista só de lectura cos datos públicos do ranking de PENALTITO
+create or replace view pt_ranking with (security_invoker = on) as
+  select dia, uid, nome, puntos, gf, paradas, resultado, creado from pt_reto;
+
+-- Vista común para xuntar os rankings de varios xogos (engade aquí outros co mesmo formato)
+create or replace view ranking_xogos with (security_invoker = on) as
+  select 'penaltito'::text as xogo, dia, uid, nome, puntos, creado from pt_reto;
+
+grant select on pt_ranking, ranking_xogos to anon, authenticated;

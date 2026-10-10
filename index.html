@@ -139,6 +139,13 @@ select.ib{padding:4px 4px;font-weight:600}
 .stats span{font-size:13px;color:var(--soft)}
 .upl{margin-top:10px;display:flex;flex-direction:column;gap:6px}
 .upl input{font:inherit;font-size:16px;font-weight:700;padding:8px 10px;border:2px solid var(--line);border-radius:8px}
+.mestat{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:6px 0 4px;border:4px solid #f4f4ec;border-bottom:none;padding:4px;background:#1d4d24;border-radius:4px 4px 0 0}
+.mestat div{aspect-ratio:1.6;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;text-shadow:1px 1px 0 #000;background:#3b4a63}
+.mestat small{font-weight:500;font-size:11px;opacity:.9}
+.dvlist{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.dvlist div{display:grid;grid-template-columns:7.5em 1fr 3.4em;align-items:center;gap:6px;font-size:14px}
+.dvlist i{height:10px;border-radius:5px;background:#2fd16a;display:block}
+.dvlist b{text-align:right}
 .pad button.go{font-weight:800;border-width:3px}
 .pad button.go:disabled{opacity:.4}
 .sw button{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #151a33;position:relative}
@@ -200,9 +207,10 @@ select.ib{padding:4px 4px;font-weight:600}
     <button class="mode" id="mDaily" style="background:#2b6fd1"><canvas id="thDaily"></canvas><b data-t="mDaily"></b><small id="mDailySub"></small></button>
     <button class="mode" id="mTrain" style="background:#1f9d4a"><canvas id="thTrain"></canvas><b data-t="mTrain"></b><small data-t="mTrainSub"></small></button>
     <button class="mode" id="mTwo" style="background:#7b3fc4"><canvas id="thTwo"></canvas><b data-t="mTwo"></b><small data-t="mTwoSub"></small></button>
+    <button class="mode" id="mOnline" style="background:#d2463b"><canvas id="thOnline"></canvas><b data-t="mOnline"></b><small data-t="mOnlineSub"></small></button>
     <button class="mode" id="mLab" style="background:#5a6283"><canvas id="thLab"></canvas><b data-t="mLab"></b><small data-t="mLabSub"></small></button>
+    <button class="mode" id="mRank" style="background:#b8860b"><canvas id="thRank"></canvas><b data-t="mRankT"></b><small data-t="mRankSub"></small></button>
   </div>
-  <button class="mback" id="mRank" style="background:#ffd23f">🏆 <span data-t="mRank"></span></button>
   <div class="namebox"><label for="pName" data-t="nameLbl"></label><input id="pName" maxlength="16" autocomplete="nickname"></div>
   <button class="mback" id="mBack" hidden data-t="back"></button>
 </div></div>
@@ -224,6 +232,18 @@ select.ib{padding:4px 4px;font-weight:600}
   <div class="row"><button class="act on" data-close data-t="close"></button></div>
 </div></div>
 
+<div class="ov" id="ovOnline"><div class="card">
+  <h2 data-t="onTitle"></h2>
+  <div id="onLobby">
+    <p class="hint" data-t="onIntro"></p>
+    <button class="act on" id="onCreate" data-t="onCreate"></button>
+    <div class="upl" style="margin-top:14px"><label><span data-t="onCode"></span> <input id="onCodeIn" maxlength="4" autocomplete="off" style="text-transform:uppercase;letter-spacing:4px;width:7em"></label><button class="act on" id="onJoin" style="background:#1f9d4a" data-t="onJoin"></button></div>
+  </div>
+  <div id="onWait" hidden><p data-t="onShare"></p><div class="bigres" id="onCodeShow" style="letter-spacing:6px"></div><button class="ib" id="onCopy" data-t="onCopy"></button><p class="hint" data-t="onWaiting" style="margin-top:10px"></p></div>
+  <p class="hint" id="onMsg"></p>
+  <div class="row"><button class="ib" id="onCancel" data-t="close"></button></div>
+</div></div>
+
 <div class="ov" id="ovHelp"><div class="card">
   <h2 data-t="helpTitle"></h2><div id="helpBody"></div>
   <div class="row"><button class="act on" data-close data-t="ok"></button></div>
@@ -231,11 +251,17 @@ select.ib{padding:4px 4px;font-weight:600}
 
 <div class="ov" id="ovLab"><div class="card">
   <h2 data-t="labTitle"></h2>
-  <p class="hint" data-t="labHint"></p>
-  <div class="kchips" id="labK"></div>
-  <div class="rslider"><span data-t="labRound"></span> <b id="labRv">1</b><input type="range" id="labR" min="1" max="10" value="1" step="1"></div>
-  <div class="heat" id="heat"></div>
-  <div class="legend"><span data-t="labHard"></span><i></i><span data-t="labEasy"></span></div>
+  <div class="tabs" id="labTabs"><button data-l="me" class="sel" data-t="labTabMe"></button><button data-l="riv" data-t="labTabRiv"></button></div>
+  <div id="labMe"></div>
+  <div id="labRiv" hidden>
+    <p class="hint" data-t="labHint"></p>
+    <div class="kchips" id="labK"></div>
+    <p id="labKdesc" style="font-size:15px"></p>
+    <div class="heat" id="heat"></div>
+    <div class="legend"><span data-t="labHard"></span><i></i><span data-t="labEasy"></span></div>
+    <h3 data-t="labShooters" style="margin:14px 0 6px;font-size:16px"></h3>
+    <div id="labShoot" style="font-size:14px"></div>
+  </div>
   <div class="row"><button class="act on" data-close data-t="close"></button></div>
 </div></div>
 
@@ -257,6 +283,7 @@ select.ib{padding:4px 4px;font-weight:600}
 </div></div>
 
 <script src="config.js" onerror=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 // ===== NÚCLEO DO XOGO (lóxica sen debuxo) =====
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -408,11 +435,11 @@ const ART={"bg": {"src": "data:image/webp;base64,UklGRtCdAQBXRUJQVlA4IMSdAQCw5gO
 (function(){
 'use strict';
 const I18N={
-gl:{pointLbl:'Sinalar:',kcharLbl:'Personaxe',shRot:'Os teus lanzadores van rotando en cada tiro.',mRank:'Ranking e estatísticas',rankTitle:'Ranking',rDay:'Hoxe',rWeek:'Semana',rMonth:'Mes',rAll:'Sempre',rMe:'Eu',rankUpload:'Subir ao ranking',rankUploaded:'Xa estás no ranking ✓',rankOffline:'O ranking funciona na versión publicada (penaltito.vercel.app).',rankEmpty:'Aínda non hai ninguén.',rankErr:'Non se puido cargar o ranking.',rankHow:'Puntos: 3 por gol, 3 por parada e 5 por gañar o reto do día.',rankName:'O teu nome:',stGames:'Partidas',stWins:'Vitorias',stGoals:'Goles',stSaves:'Paradas',stStreak:'Racha actual',stBest:'Mellor racha',stPts:'Puntos',lookLbl:'Mirar:',nameLbl:'O teu nome para o ranking',namePh:'Escribe o teu nome',modeDaily:'reto do día',modeTrain:'adestramento',modeTwo:'dous xogadores',menuSub:'Unha tanda de penaltis: tiras e paras.',
- mDaily:'Reto do día',mDailySub:'O mesmo rival para todo o mundo',mDailyPlayed:'Xa xogado hoxe: {r} (ver)',mTrain:'Adestramento',mTrainSub:'Un rival novo cada vez',mTwo:'Dous xogadores',mTwoSub:'No mesmo móbil, pasándoo',mLab:'Laboratorio',mLabSub:'Onde é máis doado marcar',streak:'Racha: {n} días seguidos',
+gl:{mOnline:'En liña',mOnlineSub:'Contra un amigo, cada quen no seu móbil',onTitle:'Xogar en liña',onIntro:'Crea unha sala e pásalle o código ao teu amigo, ou entra na súa.',onCreate:'Crear sala',onJoin:'Entrar',onCode:'Código:',onShare:'Pásalle este código:',onCopy:'Copiar ligazón',onWaiting:'Agardando a que entre…',onWaitShot:'Agardando o tiro do rival…',onWaitDive:'Agardando a estirada do rival…',onNoNet:'O xogo en liña funciona na versión publicada (penaltito.vercel.app).',onBadCode:'Escribe o código de 4 letras.',onLeft:'O teu rival saíu da sala.',rival:'Rival',mRankT:'Ranking',mRankSub:'O reto do día e as túas estatísticas',mLab:'Os teus números',mLabSub:'Onde tiras e como paras',labTitle:'Os teus números',labTabMe:'Ti',labTabRiv:'Rivais',meShots:'Onde tiras (gol %)',meDives:'Como paras (% de paradas)',meEmpty:'Xoga algunhas tandas e aquí verás onde tiras e como paras.',meDivesHint:'Conta só os tiros da máquina e en liña, non os dos dous xogadores no mesmo móbil.',labHint:'Escolle un porteiro para ver como é e onde é máis doado marcarlle.',labAllDesc:'Todos os porteiros xuntos: onde é máis doado marcar en xeral.',labShooters:'Lanzadores',kr_honrado:'Se miras a un lado, adoita crerche.',kr_mentireiro:'Se miras a un lado, desconfía e vai ao outro.',kr_estatua:'Case non fai caso á túa mirada.',kr_voador:'Crée bastante a túa mirada.',kr_tolo:'Reacciona ao chou.',sr_sincero:'Mira cara a onde vai tirar. Se sinalas un lado, adoita tirar ao contrario.',sr_enganador:'Mira a un lado e tira ao outro. Ás veces tira xusto onde sinalas.',sr_esquineiro:'Busca as escuadras e case non se deixa influír.',sr_picador:'Ás veces pícaa polo medio, sobre todo se sinalas un lado.',sr_normal:'Sen manías claras. Ás veces tira ao lado contrario do que sinalas.',pointLbl:'Sinalar:',kcharLbl:'Personaxe',shRot:'Os teus lanzadores van rotando en cada tiro.',mRank:'Ranking e estatísticas',rankTitle:'Ranking',rDay:'Hoxe',rWeek:'Semana',rMonth:'Mes',rAll:'Sempre',rMe:'Eu',rankUpload:'Subir ao ranking',rankUploaded:'Xa estás no ranking ✓',rankOffline:'O ranking funciona na versión publicada (penaltito.vercel.app).',rankEmpty:'Aínda non hai ninguén.',rankErr:'Non se puido cargar o ranking.',rankHow:'Puntos: 3 por gol, 3 por parada e 5 por gañar o reto do día.',rankName:'O teu nome:',stGames:'Partidas',stWins:'Vitorias',stGoals:'Goles',stSaves:'Paradas',stStreak:'Racha actual',stBest:'Mellor racha',stPts:'Puntos',lookLbl:'Mirar:',nameLbl:'O teu nome para o ranking',namePh:'Escribe o teu nome',modeDaily:'reto do día',modeTrain:'adestramento',modeTwo:'dous xogadores',menuSub:'Unha tanda de penaltis: tiras e paras.',
+ mDaily:'Reto do día',mDailySub:'O mesmo rival para todo o mundo',mDailyPlayed:'Xa xogado hoxe: {r} (ver)',mTrain:'Adestramento',mTrainSub:'Un rival novo cada vez',mTwo:'Dous xogadores',mTwoSub:'No mesmo móbil, pasándoo',streak:'Racha: {n} días seguidos',
  passTop:'Non mires, lanzador.',passBottom:'Colle o móbil: vas parar.',passBtn:'Estou listo',
  helpTitle:'Como se xoga',help:'<p><b>Mirar e sinalar:</b> antes de tirar, toca o céspede á esquerda, no medio ou á dereita do lanzador para que mire cara a ese lado. Cando paras contra a máquina, igual: o teu porteiro sinala ese lado. Non cambia o teu tiro nin a túa estirada, pero algúns rivais pícanse e outros fan o contrario.</p><p><b>Tirar:</b> toca a casa onde queres tirar e para a barra. No verde vai onde apuntaches; no amarelo desvíase unha casa; no vermello, dúas. Os desvíos tenden cara a fóra.</p><p><b>Parar:</b> escolle unha das 8 estiradas e verás en verde o que tapa. As medias e as baixas tapan seguro o seu lado e o pé acaba no centro, a media altura ou abaixo. O quieto e o salto chegan a medias cos brazos ou as pernas.</p><p>No reto e no adestramento, o porteiro sinala un lado e o lanzador mira a un lado: uns din a verdade e outros enganan. Algún porteiro é tramposo e adiántase: se para así, o VAR manda repetir.</p><p><b>Dous xogadores:</b> quen tira chuta e pasa o móbil sen dicir nada; quen para escolle a estirada sen saber onde foi.</p><p><b>Balóns:</b> xoga o reto varios días seguidos para desbloquear balóns novos; ademais, cada semana hai un balón especial.</p>',
- ok:'Entendido',close:'Pechar',back:'↩ Volver á partida',labTitle:'Laboratorio',labHint:'Onde é máis doado marcar contra cada porteiro. Verde: máis doado; vermello: máis difícil.',labAll:'Todos',labHard:'Máis difícil',labEasy:'Máis doado',labKeeper:'Porteiro',labAvg:'Media de todos',labRound:'Quenda',labOut:'fóra',
+ ok:'Entendido',close:'Pechar',back:'↩ Volver á partida',labAll:'Todos',labHard:'Máis difícil',labEasy:'Máis doado',labKeeper:'Porteiro',labAvg:'Media de todos',labRound:'Quenda',labOut:'fóra',
  kitTitle:'Vestiario',tabShooter:'Lanzador',tabKeeper:'Porteiro',tabBall:'Balón',design:'Deseño',c1:'Cor principal',c2:'Cor secundaria',shorts:'Pantalón',socks:'Medias',reset:'Volver á orixinal',done:'Listo',
  pats:{liso:'Liso',rayas:'Raias',diagonal:'Diagonal',metades:'Metades',aros:'Aros',banda:'Franxa'},
  dives:{alta:'Alta',salto:'Salto',media:'Media',quieto:'Quieto',baixa:'Baixa'},
@@ -432,11 +459,11 @@ gl:{pointLbl:'Sinalar:',kcharLbl:'Personaxe',shRot:'Os teus lanzadores van rotan
  kp:{honrado:['Honrado','Adoita tirarse cara a onde sinala.'],mentireiro:['Mentireiro','Sinala un lado e adoita tirarse ao outro.'],estatua:['Estatua','Quédase moito no centro.'],voador:['Voador','Encántanlle as estiradas altas e os saltos.'],tolo:['Tolo','Non segue ningún patrón.']},
  sp:{sincero:'Sincero',enganador:'Enganador',esquineiro:'Esquineiro',picador:'Picador',normal:'Clásico'},
  balls:{clasico:'Clásico',retro:'De coiro',neve:'Laranxa de neve',praia:'De praia',ouro:'De ouro',cristal:'De cristal',cabaza:'Cabaza',melancia:'Melancía',papel:'Bóla de papel',trapo:'De trapo',tenis:'De tenis',disco:'Discoteca'}},
-es:{pointLbl:'Señalar:',kcharLbl:'Personaje',shRot:'Tus lanzadores van rotando en cada tiro.',mRank:'Ranking y estadísticas',rankTitle:'Ranking',rDay:'Hoy',rWeek:'Semana',rMonth:'Mes',rAll:'Siempre',rMe:'Yo',rankUpload:'Subir al ranking',rankUploaded:'Ya estás en el ranking ✓',rankOffline:'El ranking funciona en la versión publicada (penaltito.vercel.app).',rankEmpty:'Todavía no hay nadie.',rankErr:'No se pudo cargar el ranking.',rankHow:'Puntos: 3 por gol, 3 por parada y 5 por ganar el reto del día.',rankName:'Tu nombre:',stGames:'Partidas',stWins:'Victorias',stGoals:'Goles',stSaves:'Paradas',stStreak:'Racha actual',stBest:'Mejor racha',stPts:'Puntos',lookLbl:'Mirar:',nameLbl:'Tu nombre para el ranking',namePh:'Escribe tu nombre',modeDaily:'reto del día',modeTrain:'entrenamiento',modeTwo:'dos jugadores',menuSub:'Una tanda de penaltis: tiras y paras.',
- mDaily:'Reto del día',mDailySub:'El mismo rival para todo el mundo',mDailyPlayed:'Ya jugado hoy: {r} (ver)',mTrain:'Entrenamiento',mTrainSub:'Un rival nuevo cada vez',mTwo:'Dos jugadores',mTwoSub:'En el mismo móvil, pasándolo',mLab:'Laboratorio',mLabSub:'Dónde es más fácil marcar',streak:'Racha: {n} días seguidos',
+es:{mOnline:'En línea',mOnlineSub:'Contra un amigo, cada uno en su móvil',onTitle:'Jugar en línea',onIntro:'Crea una sala y pásale el código a tu amigo, o entra en la suya.',onCreate:'Crear sala',onJoin:'Entrar',onCode:'Código:',onShare:'Pásale este código:',onCopy:'Copiar enlace',onWaiting:'Esperando a que entre…',onWaitShot:'Esperando el tiro del rival…',onWaitDive:'Esperando la estirada del rival…',onNoNet:'El juego en línea funciona en la versión publicada (penaltito.vercel.app).',onBadCode:'Escribe el código de 4 letras.',onLeft:'Tu rival ha salido de la sala.',rival:'Rival',mRankT:'Ranking',mRankSub:'El reto del día y tus estadísticas',mLab:'Tus números',mLabSub:'Dónde tiras y cómo paras',labTitle:'Tus números',labTabMe:'Tú',labTabRiv:'Rivales',meShots:'Dónde tiras (gol %)',meDives:'Cómo paras (% de paradas)',meEmpty:'Juega algunas tandas y aquí verás dónde tiras y cómo paras.',meDivesHint:'Cuenta solo los tiros contra la máquina y en línea, no los de dos jugadores en el mismo móvil.',labHint:'Elige un portero para ver cómo es y dónde es más fácil marcarle.',labAllDesc:'Todos los porteros juntos: dónde es más fácil marcar en general.',labShooters:'Lanzadores',kr_honrado:'Si miras a un lado, suele creerte.',kr_mentireiro:'Si miras a un lado, desconfía y se va al otro.',kr_estatua:'Casi no hace caso a tu mirada.',kr_voador:'Se cree bastante tu mirada.',kr_tolo:'Reacciona al azar.',sr_sincero:'Mira hacia donde va a tirar. Si señalas un lado, suele tirar al contrario.',sr_enganador:'Mira a un lado y tira al otro. A veces tira justo donde señalas.',sr_esquineiro:'Busca las escuadras y casi no se deja influir.',sr_picador:'A veces la pica por el medio, sobre todo si señalas un lado.',sr_normal:'Sin manías claras. A veces tira al lado contrario del que señalas.',pointLbl:'Señalar:',kcharLbl:'Personaje',shRot:'Tus lanzadores van rotando en cada tiro.',mRank:'Ranking y estadísticas',rankTitle:'Ranking',rDay:'Hoy',rWeek:'Semana',rMonth:'Mes',rAll:'Siempre',rMe:'Yo',rankUpload:'Subir al ranking',rankUploaded:'Ya estás en el ranking ✓',rankOffline:'El ranking funciona en la versión publicada (penaltito.vercel.app).',rankEmpty:'Todavía no hay nadie.',rankErr:'No se pudo cargar el ranking.',rankHow:'Puntos: 3 por gol, 3 por parada y 5 por ganar el reto del día.',rankName:'Tu nombre:',stGames:'Partidas',stWins:'Victorias',stGoals:'Goles',stSaves:'Paradas',stStreak:'Racha actual',stBest:'Mejor racha',stPts:'Puntos',lookLbl:'Mirar:',nameLbl:'Tu nombre para el ranking',namePh:'Escribe tu nombre',modeDaily:'reto del día',modeTrain:'entrenamiento',modeTwo:'dos jugadores',menuSub:'Una tanda de penaltis: tiras y paras.',
+ mDaily:'Reto del día',mDailySub:'El mismo rival para todo el mundo',mDailyPlayed:'Ya jugado hoy: {r} (ver)',mTrain:'Entrenamiento',mTrainSub:'Un rival nuevo cada vez',mTwo:'Dos jugadores',mTwoSub:'En el mismo móvil, pasándolo',streak:'Racha: {n} días seguidos',
  passTop:'No mires, lanzador.',passBottom:'Coge el móvil: vas a parar.',passBtn:'Estoy listo',
  helpTitle:'Cómo se juega',help:'<p><b>Mirar y señalar:</b> antes de tirar, toca el césped a la izquierda, en el medio o a la derecha del lanzador para que mire hacia ese lado. Cuando paras contra la máquina, igual: tu portero señala ese lado. No cambia tu tiro ni tu estirada, pero algunos rivales pican y otros hacen lo contrario.</p><p><b>Tirar:</b> toca la casilla donde quieres tirar y para la barra. En el verde va donde apuntaste; en el amarillo se desvía una casilla; en el rojo, dos. Los desvíos tienden hacia fuera.</p><p><b>Parar:</b> elige una de las 8 estiradas y verás en verde lo que tapa. Las medias y las bajas tapan seguro su lado y el pie acaba en el centro, a media altura o abajo. El quieto y el salto llegan a medias con los brazos o las piernas.</p><p>En el reto y en el entrenamiento, el portero señala un lado y el lanzador mira a un lado: unos dicen la verdad y otros engañan. Algún portero es tramposo y se adelanta: si para así, el VAR manda repetir.</p><p><b>Dos jugadores:</b> quien tira chuta y pasa el móvil sin decir nada; quien para elige la estirada sin saber dónde fue.</p><p><b>Balones:</b> juega el reto varios días seguidos para desbloquear balones nuevos; además, cada semana hay un balón especial.</p>',
- ok:'Entendido',close:'Cerrar',back:'↩ Volver a la partida',labTitle:'Laboratorio',labHint:'Dónde es más fácil marcar contra cada portero. Verde: más fácil; rojo: más difícil.',labAll:'Todos',labHard:'Más difícil',labEasy:'Más fácil',labKeeper:'Portero',labAvg:'Media de todos',labRound:'Ronda',labOut:'fuera',
+ ok:'Entendido',close:'Cerrar',back:'↩ Volver a la partida',labAll:'Todos',labHard:'Más difícil',labEasy:'Más fácil',labKeeper:'Portero',labAvg:'Media de todos',labRound:'Ronda',labOut:'fuera',
  kitTitle:'Vestuario',tabShooter:'Lanzador',tabKeeper:'Portero',tabBall:'Balón',design:'Diseño',c1:'Color principal',c2:'Color secundario',shorts:'Pantalón',socks:'Medias',reset:'Volver al original',done:'Listo',
  pats:{liso:'Liso',rayas:'Rayas',diagonal:'Diagonal',metades:'Mitades',aros:'Aros',banda:'Franja'},
  dives:{alta:'Alta',salto:'Salto',media:'Media',quieto:'Quieto',baixa:'Baja'},
@@ -456,11 +483,11 @@ es:{pointLbl:'Señalar:',kcharLbl:'Personaje',shRot:'Tus lanzadores van rotando 
  kp:{honrado:['Honrado','Suele tirarse hacia donde señala.'],mentireiro:['Mentiroso','Señala un lado y suele tirarse al otro.'],estatua:['Estatua','Se queda mucho en el centro.'],voador:['Volador','Le encantan las estiradas altas y los saltos.'],tolo:['Loco','No sigue ningún patrón.']},
  sp:{sincero:'Sincero',enganador:'Engañador',esquineiro:'Esquinero',picador:'Picador',normal:'Clásico'},
  balls:{clasico:'Clásico',retro:'De cuero',neve:'Naranja de nieve',praia:'De playa',ouro:'De oro',cristal:'De cristal',cabaza:'Calabaza',melancia:'Sandía',papel:'Bola de papel',trapo:'De trapo',tenis:'De tenis',disco:'Discoteca'}},
-ca:{pointLbl:'Assenyalar:',kcharLbl:'Personatge',shRot:'Els teus xutadors van rotant a cada xut.',mRank:'Rànquing i estadístiques',rankTitle:'Rànquing',rDay:'Avui',rWeek:'Setmana',rMonth:'Mes',rAll:'Sempre',rMe:'Jo',rankUpload:'Pujar al rànquing',rankUploaded:'Ja ets al rànquing ✓',rankOffline:'El rànquing funciona a la versió publicada (penaltito.vercel.app).',rankEmpty:'Encara no hi ha ningú.',rankErr:'No s\'ha pogut carregar el rànquing.',rankHow:'Punts: 3 per gol, 3 per aturada i 5 per guanyar el repte del dia.',rankName:'El teu nom:',stGames:'Partides',stWins:'Victòries',stGoals:'Gols',stSaves:'Aturades',stStreak:'Ratxa actual',stBest:'Millor ratxa',stPts:'Punts',lookLbl:'Mirar:',nameLbl:'El teu nom per al rànquing',namePh:'Escriu el teu nom',modeDaily:'repte del dia',modeTrain:'entrenament',modeTwo:'dos jugadors',menuSub:'Una tanda de penals: xutes i atures.',
- mDaily:'Repte del dia',mDailySub:'El mateix rival per a tothom',mDailyPlayed:'Ja jugat avui: {r} (veure)',mTrain:'Entrenament',mTrainSub:'Un rival nou cada vegada',mTwo:'Dos jugadors',mTwoSub:'Al mateix mòbil, passant-lo',mLab:'Laboratori',mLabSub:'On és més fàcil marcar',streak:'Ratxa: {n} dies seguits',
+ca:{mOnline:'En línia',mOnlineSub:'Contra un amic, cadascú al seu mòbil',onTitle:'Jugar en línia',onIntro:'Crea una sala i passa-li el codi al teu amic, o entra a la seva.',onCreate:'Crear sala',onJoin:'Entrar',onCode:'Codi:',onShare:'Passa-li aquest codi:',onCopy:'Copiar enllaç',onWaiting:'Esperant que entri…',onWaitShot:'Esperant el xut del rival…',onWaitDive:'Esperant l’estirada del rival…',onNoNet:'El joc en línia funciona a la versió publicada (penaltito.vercel.app).',onBadCode:'Escriu el codi de 4 lletres.',onLeft:'El teu rival ha sortit de la sala.',rival:'Rival',mRankT:'Rànquing',mRankSub:'El repte del dia i les teves estadístiques',mLab:'Els teus números',mLabSub:'On xutes i com atures',labTitle:'Els teus números',labTabMe:'Tu',labTabRiv:'Rivals',meShots:'On xutes (gol %)',meDives:'Com atures (% d’aturades)',meEmpty:'Juga unes quantes tandes i aquí veuràs on xutes i com atures.',meDivesHint:'Només compta els xuts contra la màquina i en línia, no els de dos jugadors al mateix mòbil.',labHint:'Tria un porter per veure com és i on és més fàcil marcar-li.',labAllDesc:'Tots els porters junts: on és més fàcil marcar en general.',labShooters:'Xutadors',kr_honrado:'Si mires cap a un costat, sol creure’t.',kr_mentireiro:'Si mires cap a un costat, desconfia i va a l’altre.',kr_estatua:'Gairebé no fa cas de la teva mirada.',kr_voador:'Es creu força la teva mirada.',kr_tolo:'Reacciona a l’atzar.',sr_sincero:'Mira cap on xutarà. Si assenyales un costat, sol xutar al contrari.',sr_enganador:'Mira cap a un costat i xuta a l’altre. De vegades xuta just on assenyales.',sr_esquineiro:'Busca els escaires i gairebé no es deixa influir.',sr_picador:'De vegades la pica pel mig, sobretot si assenyales un costat.',sr_normal:'Sense manies clares. De vegades xuta al costat contrari del que assenyales.',pointLbl:'Assenyalar:',kcharLbl:'Personatge',shRot:'Els teus xutadors van rotant a cada xut.',mRank:'Rànquing i estadístiques',rankTitle:'Rànquing',rDay:'Avui',rWeek:'Setmana',rMonth:'Mes',rAll:'Sempre',rMe:'Jo',rankUpload:'Pujar al rànquing',rankUploaded:'Ja ets al rànquing ✓',rankOffline:'El rànquing funciona a la versió publicada (penaltito.vercel.app).',rankEmpty:'Encara no hi ha ningú.',rankErr:'No s\'ha pogut carregar el rànquing.',rankHow:'Punts: 3 per gol, 3 per aturada i 5 per guanyar el repte del dia.',rankName:'El teu nom:',stGames:'Partides',stWins:'Victòries',stGoals:'Gols',stSaves:'Aturades',stStreak:'Ratxa actual',stBest:'Millor ratxa',stPts:'Punts',lookLbl:'Mirar:',nameLbl:'El teu nom per al rànquing',namePh:'Escriu el teu nom',modeDaily:'repte del dia',modeTrain:'entrenament',modeTwo:'dos jugadors',menuSub:'Una tanda de penals: xutes i atures.',
+ mDaily:'Repte del dia',mDailySub:'El mateix rival per a tothom',mDailyPlayed:'Ja jugat avui: {r} (veure)',mTrain:'Entrenament',mTrainSub:'Un rival nou cada vegada',mTwo:'Dos jugadors',mTwoSub:'Al mateix mòbil, passant-lo',streak:'Ratxa: {n} dies seguits',
  passTop:'No miris, xutador.',passBottom:'Agafa el mòbil: aturaràs.',passBtn:'Estic a punt',
  helpTitle:'Com es juga',help:'<p><b>Mirar i assenyalar:</b> abans de xutar, toca la gespa a l’esquerra, al mig o a la dreta del xutador perquè miri cap a aquell costat. Quan atures contra la màquina, igual: el teu porter assenyala aquell costat. No canvia el teu xut ni la teva estirada, però alguns rivals s’ho creuen i d’altres fan el contrari.</p><p><b>Xutar:</b> toca la casella on vols xutar i atura la barra. Al verd va on has apuntat; al groc es desvia una casella; al vermell, dues. Els desviaments tendeixen cap a fora.</p><p><b>Aturar:</b> tria una de les 8 estirades i veuràs en verd el que tapa. Les mitjanes i les baixes tapen segur el seu costat i el peu acaba al centre, a mitja alçada o a baix. El quiet i el salt hi arriben a mitges amb els braços o les cames.</p><p>Al repte i a l\'entrenament, el porter assenyala un costat i el xutador mira cap a un costat: uns diuen la veritat i d\'altres enganyen. Algun porter és trampós i s\'avança: si atura així, el VAR fa repetir.</p><p><b>Dos jugadors:</b> qui xuta, xuta i passa el mòbil sense dir res; qui atura tria l\'estirada sense saber on ha anat.</p><p><b>Pilotes:</b> juga el repte uns quants dies seguits per desbloquejar pilotes noves; a més, cada setmana hi ha una pilota especial.</p>',
- ok:'Entesos',close:'Tancar',back:'↩ Tornar a la partida',labTitle:'Laboratori',labHint:'On és més fàcil marcar contra cada porter. Verd: més fàcil; vermell: més difícil.',labAll:'Tots',labHard:'Més difícil',labEasy:'Més fàcil',labKeeper:'Porter',labAvg:'Mitjana de tots',labRound:'Ronda',labOut:'fora',
+ ok:'Entesos',close:'Tancar',back:'↩ Tornar a la partida',labAll:'Tots',labHard:'Més difícil',labEasy:'Més fàcil',labKeeper:'Porter',labAvg:'Mitjana de tots',labRound:'Ronda',labOut:'fora',
  kitTitle:'Vestidor',tabShooter:'Xutador',tabKeeper:'Porter',tabBall:'Pilota',design:'Disseny',c1:'Color principal',c2:'Color secundari',shorts:'Pantalons',socks:'Mitjons',reset:'Tornar a l\'original',done:'Fet',
  pats:{liso:'Llis',rayas:'Ratlles',diagonal:'Diagonal',metades:'Meitats',aros:'Cèrcols',banda:'Franja'},
  dives:{alta:'Alta',salto:'Salt',media:'Mitja',quieto:'Quiet',baixa:'Baixa'},
@@ -480,11 +507,11 @@ ca:{pointLbl:'Assenyalar:',kcharLbl:'Personatge',shRot:'Els teus xutadors van ro
  kp:{honrado:['Honest','Sol llançar-se cap on assenyala.'],mentireiro:['Mentider','Assenyala un costat i sol llançar-se a l\'altre.'],estatua:['Estàtua','Es queda molt al centre.'],voador:['Volador','Li encanten les estirades altes i els salts.'],tolo:['Boig','No segueix cap patró.']},
  sp:{sincero:'Sincer',enganador:'Enganyador',esquineiro:'Escairador',picador:'Vaselinista',normal:'Clàssic'},
  balls:{clasico:'Clàssica',retro:'De cuir',neve:'Taronja de neu',praia:'De platja',ouro:'D\'or',cristal:'De vidre',cabaza:'Carabassa',melancia:'Síndria',papel:'Bola de paper',trapo:'De drap',tenis:'De tennis',disco:'Discoteca'}},
-eu:{pointLbl:'Seinalatu:',kcharLbl:'Pertsonaia',shRot:'Zure jaurtitzaileak txandaka aldatzen dira jaurtiketa bakoitzean.',mRank:'Sailkapena eta estatistikak',rankTitle:'Sailkapena',rDay:'Gaur',rWeek:'Astea',rMonth:'Hilabetea',rAll:'Beti',rMe:'Ni',rankUpload:'Igo sailkapenera',rankUploaded:'Sailkapenean zaude ✓',rankOffline:'Sailkapenak argitaratutako bertsioan funtzionatzen du (penaltito.vercel.app).',rankEmpty:'Oraindik ez dago inor.',rankErr:'Ezin izan da sailkapena kargatu.',rankHow:'Puntuak: 3 gol bakoitzeko, 3 geldiketa bakoitzeko eta 5 eguneko erronka irabazteagatik.',rankName:'Zure izena:',stGames:'Partidak',stWins:'Garaipenak',stGoals:'Golak',stSaves:'Geldiketak',stStreak:'Uneko bolada',stBest:'Bolada onena',stPts:'Puntuak',lookLbl:'Begiratu:',nameLbl:'Zure izena sailkapenerako',namePh:'Idatzi zure izena',modeDaily:'eguneko erronka',modeTrain:'entrenamendua',modeTwo:'bi jokalari',menuSub:'Penalti sorta bat: jaurti eta geldiarazi.',
- mDaily:'Eguneko erronka',mDailySub:'Aurkari bera guztiontzat',mDailyPlayed:'Gaur jokatuta: {r} (ikusi)',mTrain:'Entrenamendua',mTrainSub:'Aurkari berri bat aldiro',mTwo:'Bi jokalari',mTwoSub:'Mugikor berean, pasatuz',mLab:'Laborategia',mLabSub:'Non den errazagoa gola',streak:'Bolada: {n} egun jarraian',
+eu:{mOnline:'Sarean',mOnlineSub:'Lagun baten aurka, bakoitza bere mugikorrean',onTitle:'Sarean jokatu',onIntro:'Sortu gela bat eta pasa iezaiozu kodea zure lagunari, edo sartu berean.',onCreate:'Sortu gela',onJoin:'Sartu',onCode:'Kodea:',onShare:'Pasa iezaiozu kode hau:',onCopy:'Kopiatu esteka',onWaiting:'Sartu arte zain…',onWaitShot:'Aurkariaren jaurtiketaren zain…',onWaitDive:'Aurkariaren saltoaren zain…',onNoNet:'Sareko jokoak argitaratutako bertsioan funtzionatzen du (penaltito.vercel.app).',onBadCode:'Idatzi 4 hizkiko kodea.',onLeft:'Zure aurkaria gelatik irten da.',rival:'Aurkaria',mRankT:'Sailkapena',mRankSub:'Eguneko erronka eta zure estatistikak',mLab:'Zure zenbakiak',mLabSub:'Non jaurtitzen duzun eta nola geldiarazten duzun',labTitle:'Zure zenbakiak',labTabMe:'Zu',labTabRiv:'Aurkariak',meShots:'Non jaurtitzen duzun (gol %)',meDives:'Nola geldiarazten duzun (geldiketa %)',meEmpty:'Jokatu sorta batzuk eta hemen ikusiko duzu non jaurtitzen duzun eta nola geldiarazten duzun.',meDivesHint:'Makinaren aurkako eta sareko jaurtiketak bakarrik zenbatzen dira, ez mugikor berean bi jokalarik egindakoak.',labHint:'Aukeratu atezain bat nolakoa den eta non den errazagoa gola sartzea ikusteko.',labAllDesc:'Atezain guztiak batera: non den errazagoa gola sartzea, oro har.',labShooters:'Jaurtitzaileak',kr_honrado:'Alde batera begiratzen baduzu, sinetsi egiten zaitu normalean.',kr_mentireiro:'Alde batera begiratzen baduzu, mesfidatu eta bestera doa.',kr_estatua:'Ia ez dio zure begiradari jaramonik egiten.',kr_voador:'Zure begirada nahiko sinesten du.',kr_tolo:'Zoriz erreakzionatzen du.',sr_sincero:'Jaurtiko duen aldera begiratzen du. Alde bat seinalatzen baduzu, kontrakora jaurtitzen du normalean.',sr_enganador:'Alde batera begiratu eta bestera jaurtitzen du. Batzuetan seinalatzen duzun lekura jaurtitzen du.',sr_esquineiro:'Txokoak bilatzen ditu eta ia ez da eraginik hartzen.',sr_picador:'Batzuetan erditik jasotzen du, batez ere alde bat seinalatzen baduzu.',sr_normal:'Ez du joera argirik. Batzuetan seinalatzen duzunaren kontrako aldera jaurtitzen du.',pointLbl:'Seinalatu:',kcharLbl:'Pertsonaia',shRot:'Zure jaurtitzaileak txandaka aldatzen dira jaurtiketa bakoitzean.',mRank:'Sailkapena eta estatistikak',rankTitle:'Sailkapena',rDay:'Gaur',rWeek:'Astea',rMonth:'Hilabetea',rAll:'Beti',rMe:'Ni',rankUpload:'Igo sailkapenera',rankUploaded:'Sailkapenean zaude ✓',rankOffline:'Sailkapenak argitaratutako bertsioan funtzionatzen du (penaltito.vercel.app).',rankEmpty:'Oraindik ez dago inor.',rankErr:'Ezin izan da sailkapena kargatu.',rankHow:'Puntuak: 3 gol bakoitzeko, 3 geldiketa bakoitzeko eta 5 eguneko erronka irabazteagatik.',rankName:'Zure izena:',stGames:'Partidak',stWins:'Garaipenak',stGoals:'Golak',stSaves:'Geldiketak',stStreak:'Uneko bolada',stBest:'Bolada onena',stPts:'Puntuak',lookLbl:'Begiratu:',nameLbl:'Zure izena sailkapenerako',namePh:'Idatzi zure izena',modeDaily:'eguneko erronka',modeTrain:'entrenamendua',modeTwo:'bi jokalari',menuSub:'Penalti sorta bat: jaurti eta geldiarazi.',
+ mDaily:'Eguneko erronka',mDailySub:'Aurkari bera guztiontzat',mDailyPlayed:'Gaur jokatuta: {r} (ikusi)',mTrain:'Entrenamendua',mTrainSub:'Aurkari berri bat aldiro',mTwo:'Bi jokalari',mTwoSub:'Mugikor berean, pasatuz',streak:'Bolada: {n} egun jarraian',
  passTop:'Ez begiratu, jaurtitzaile.',passBottom:'Hartu mugikorra: zuk geldiaraziko duzu.',passBtn:'Prest nago',
  helpTitle:'Nola jokatu',help:'<p><b>Begiratu eta seinalatu:</b> jaurti aurretik, ukitu belarra jaurtitzailearen ezkerrean, erdian edo eskuinean, alde horretara begira dezan. Makinaren aurka geldiaraztean, berdin: zure atezainak alde hori seinalatzen du. Ez du zure jaurtiketa edo saltoa aldatzen, baina aurkari batzuek sinesten dute eta beste batzuek kontrakoa egiten dute.</p><p><b>Jaurti:</b> ukitu jaurti nahi duzun laukia eta gelditu barra. Berdean, apuntatu duzun lekura doa; horian, lauki bat desbideratzen da; gorrian, bi. Desbideratzeak kanpora joaten dira gehienetan.</p><p><b>Geldiarazi:</b> aukeratu 8 saltoetako bat eta berdez ikusiko duzu zer estaltzen duen. Erdiko eta beheko saltoek beren aldea seguru estaltzen dute, eta oina erdian amaitzen da, erdiko altueran edo behean. Geldi egoteak eta jauziak erdizka iristen dira besoekin edo hankekin.</p><p>Erronkan eta entrenamenduan, atezainak alde bat seinalatzen du eta jaurtitzaileak alde batera begiratzen du: batzuek egia esaten dute eta beste batzuek engainatzen dute. Atezainen bat tranpatia da eta aurreratu egiten da: horrela geldiarazten badu, VARrek errepikatzeko agintzen du.</p><p><b>Bi jokalari:</b> jaurtitzen duenak jaurti eta mugikorra pasatzen du ezer esan gabe; geldiarazten duenak saltoa aukeratzen du baloia nora joan den jakin gabe.</p><p><b>Baloiak:</b> jokatu erronka hainbat egunez jarraian baloi berriak desblokeatzeko; gainera, astero baloi berezi bat dago.</p>',
- ok:'Ados',close:'Itxi',back:'↩ Partidara itzuli',labTitle:'Laborategia',labHint:'Non den errazagoa gola sartzea atezain bakoitzari. Berdea: errazagoa; gorria: zailagoa.',labAll:'Denak',labHard:'Zailagoa',labEasy:'Errazagoa',labKeeper:'Atezaina',labAvg:'Guztien batez bestekoa',labRound:'Txanda',labOut:'kanpora',
+ ok:'Ados',close:'Itxi',back:'↩ Partidara itzuli',labAll:'Denak',labHard:'Zailagoa',labEasy:'Errazagoa',labKeeper:'Atezaina',labAvg:'Guztien batez bestekoa',labRound:'Txanda',labOut:'kanpora',
  kitTitle:'Aldagela',tabShooter:'Jaurtitzailea',tabKeeper:'Atezaina',tabBall:'Baloia',design:'Diseinua',c1:'Kolore nagusia',c2:'Bigarren kolorea',shorts:'Galtzak',socks:'Galtzerdiak',reset:'Jatorrizkora itzuli',done:'Eginda',
  pats:{liso:'Laua',rayas:'Marrak',diagonal:'Diagonala',metades:'Erdibana',aros:'Uztaiak',banda:'Banda'},
  dives:{alta:'Goian',salto:'Jauzia',media:'Erdian',quieto:'Geldi',baixa:'Behean'},
@@ -540,13 +567,15 @@ function makeRivalKits(seed){const g=rngFor(seed,'kit');const pick=a=>a[Math.flo
 // ---------- estado ----------
 // lado A = ti / xogador 1 ; lado B = rival / xogador 2
 let mode='diario',day,A,B,state='menu',scene=null,sel=null,aimCell=null,hoverCell=null,barT0=0,retake=false,pending=null;
-const two=()=>mode==='dous';
+const two=()=>mode==='dous'||mode==='online';
+const online=()=>mode==='online';
+let ON=null;
 let pName=store.get('pt-name')||'';
-const nameOf=s=>two()?(s==='A'?t('p1'):t('p2')):(s==='A'?(pName||t('you')):day.team);
-const kitOf=s=>two()?(s==='A'?kits:P2_KITS):(s==='A'?kits:rivalKits);
+const nameOf=s=>online()?(s===ON.side?(pName||t('you')):((ON.opp&&ON.opp.name)||t('rival'))):two()?(s==='A'?t('p1'):t('p2')):(s==='A'?(pName||t('you')):day.team);
+const kitOf=s=>online()?(s===ON.side?kits:((ON.opp&&ON.opp.kits)||P2_KITS)):two()?(s==='A'?kits:P2_KITS):(s==='A'?kits:rivalKits);
 const shooterSide=()=>A.length===B.length?'A':'B';
 const otherSide=s=>s==='A'?'B':'A';
-const humanSide=s=>two()||s==='A';
+const humanSide=s=>online()?s===ON.side:(two()||s==='A');
 
 const LN={
 gl:{f:['Uxía','Antía','Sabela','Iria','Xoana','Aldara','Olalla','Carme','Navia','Mencía','Noa','Lúa','Brais','Xián','Iago','Breixo','Martiño','Anxo','Roi','Fiz','Duarte','Telmo','Xurxo','Bieito'],
@@ -603,13 +632,18 @@ function decided(){
 const sideTxt=k=>L().sides[k];
 function setStatus(h){$('status').innerHTML=h}
 function rdA(){return day.rounds[A.length]}
-function curTell(){if(two())return null;const rd=rdA();return retake?rd.retake.tell:rd.keeperTell}
+function curTell(){if(online()){const v=ON.point[kIdx()];return v&&v!=='C'?v:null}if(two())return null;const rd=rdA();return retake?rd.retake.tell:rd.keeperTell}
 function isCheat(){return !two()&&shooterSide()==='A'&&!retake&&rdA().cheat}
 function curZones(){const sh=shooterSide();const z=zones((sh==='A'?A:B).length);let p=z.p,n=z.n;if(two()){p*=1.15;n=Math.min(.92,n*1.1)}if(isCheat()){p*=.72;n*=.85}return{p,n}}
 function hidePad(){$('pad').classList.remove('on');$('act').classList.remove('on');if(state!=='aim'&&state!=='power'&&state!=='keep')$('looks').hidden=true}
+const kIdx=()=>A.length+B.length;
 function nextKick(){
   const d=decided();if(d){finish(d);return}
   sel=null;aimCell=null;pending=null;
+  if(online()){const sh=shooterSide();lookSel='C';
+    if(sh===ON.side){state='aim';hidePad();const tl=curTell();setStatus('<b>'+t('youShoot')+'</b> '+(tl?t('tellK',{s:sideTxt(tl)}):'')+'<br><span class="hint">'+t('hintAim')+'</span>')}
+    else{state='keep';setStatus('<b>'+t('youKeep')+'</b> '+t('twoShoot',{n:nameOf(sh)})+'<br><span class="hint">'+t('hintKeep')+'</span>');showPad()}
+    renderBoard();tryResolve();return}
   const sh=shooterSide();
   if(humanSide(sh)){
     state='aim';hidePad();lookSel='C';lookMode='look';showLooks(true);
@@ -623,11 +657,11 @@ function nextKick(){
   renderBoard();
 }
 function showPad(){$('pad').classList.add('on');$('act').classList.remove('on');[...$('pad').querySelectorAll('button[data-d]')].forEach(b=>b.classList.remove('sel'));
-  const ks=state==='keep2'?otherSide(pending.sh):'A',kc=kitOf(ks).keeper.c1,g=$('padGo');g.disabled=true;g.textContent=t('dive');g.style.background=kc;g.style.color=lum(kc)>0.55?'#151a33':'#ffffff'}
+  const ks=online()?ON.side:state==='keep2'?otherSide(pending.sh):'A',kc=kitOf(ks).keeper.c1,g=$('padGo');g.disabled=true;g.textContent=t('dive');g.style.background=kc;g.style.color=lum(kc)>0.55?'#151a33':'#ffffff'}
 
 function cellAt(x,y){const c=Math.floor((x-GX0)/CW)+1,r=Math.floor((y-GY0)/CH)+1;if(c>=1&&c<=5&&r>=1&&r<=3)return[c,r];return null}
 function toCanvas(e){const b=cv.getBoundingClientRect();return[(e.clientX-b.left)/b.width*W,(e.clientY-b.top)/b.height*H]}
-cv.addEventListener('pointerdown',e=>{const[x,y]=toCanvas(e);if((state==='aim'||state==='keep')&&y>GY1+8){lookSel=x<W/3?'L':x>W*2/3?'R':'C';return}if(state==='aim'){const c=cellAt(x,y);if(c){aimCell=c;startPower()}}else if(state==='power')shoot()});
+cv.addEventListener('pointerdown',e=>{const[x,y]=toCanvas(e);if((state==='aim'||state==='keep')&&y>GY1+8){lookSel=x<W/3?'L':x>W*2/3?'R':'C';if(online())netSend({t:state==='aim'?'look':'point',k:kIdx(),v:lookSel});return}if(state==='aim'){const c=cellAt(x,y);if(c){aimCell=c;startPower()}}else if(state==='power')shoot()});
 cv.addEventListener('pointermove',e=>{const[x,y]=toCanvas(e);hoverCell=cellAt(x,y)});
 cv.addEventListener('pointerleave',()=>hoverCell=null);
 document.addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='Enter')&&state==='power'){e.preventDefault();shoot()}});
@@ -660,6 +694,7 @@ function shoot(){
   const err=Math.abs(barPos(performance.now())),z=curZones(),steps=err<z.p?0:(err<z.n?1:2);
   const aim=aimCell;
   const q=steps===0?t('qPerfect'):steps===1?t('qSlight'):t('qBad');
+  if(online()){const k=kIdx(),m={t:'shot',k,aim,steps,look:lookSel};ON.mine[k]=m;ON.shots[k]=m;netSend(m);state='waitO';hidePad();setStatus(q+' '+t('onWaitDive'));tryResolve();return}
   if(two()){
     pending={sh,aim,steps,q,look:lookSel};state='pass';hidePad();showLooks(false);setStatus('');
     $('passName').textContent=nameOf(otherSide(sh));$('ovPass').classList.add('on');return;
@@ -669,12 +704,14 @@ function shoot(){
   const dive=concrete(diveById(keeperReact(baseId,day.keeper.pers,lookSel,rngFor(day.seed,'le'+i+(retake?'r':'')+lookSel))),retake?rd.retake.foot:rd.keeperFoot,cheat);
   const out=resolveShot(aim[0],aim[1],steps,dive,rngFor(day.seed,'dev'+i+(retake?'r':'')+'-'+aim.join('')));
   state='anim';hidePad();setStatus(q);
+  addHist('s',[aim[0],aim[1],out.res]);
   startScene({sh:'A',out,dive,tell:curTell(),cheat,onEnd:()=>{
     if(cheat&&out.res==='parada'){varCheck()}else{retake=false;A.push(out);nextKick()}}});
 }
 $('bPass').onclick=()=>{$('ovPass').classList.remove('on');state='keep2';setStatus('<b>'+t('twoKeep',{n:nameOf(otherSide(pending.sh))})+'</b> '+t('looks',{s:sideTxt(pending.look)})+'<br><span class="hint">'+t('hintKeep')+'</span>');showPad()};
 function keep(){
   const dv=diveById(sel);
+  if(online()){const k=kIdx(),m={t:'dive',k,dive:sel,point:lookSel};ON.mine[k]=m;ON.dives[k]=m;netSend(m);state='waitO';hidePad();setStatus(diveLabel(dv)+'… '+t('onWaitShot'));tryResolve();return}
   if(state==='keep2'){
     const p=pending,rng=mulberry32((Math.random()*4294967296)>>>0);
     const dive=concrete(dv,rng()<.5?2:3,false);
@@ -687,10 +724,52 @@ function keep(){
   const dive=concrete(dv,rd.playerFoot,false);
   const tg=shooterReact(rd.shot.target,day.shooters[i].pers,lookSel,rngFor(day.seed,'sr'+i+lookSel));
   const out=resolveShot(tg[0],tg[1],rd.shotSteps,dive,rngFor(day.seed,'rdev'+i));
+  addHist('k',[sel,out.res]);
   const pt=lookSel==='C'?null:lookSel;
   state='anim';hidePad();$('looks').hidden=true;setStatus(diveLabel(dv)+'…');
   startScene({sh:'B',out,dive,tell:pt,shotTell:rd.shot.tell,onEnd:()=>{B.push(out);nextKick()}});
 }
+// ---------- en liña ----------
+let NET=null;
+function netClose(){if(NET){try{NET.close()}catch(e){}NET=null}}
+function netOpen(code){netClose();
+  if(window.supabase&&CFG){const sb=window.supabase.createClient(CFG.url,CFG.key);const ch=sb.channel('pt-'+code,{config:{broadcast:{self:false}}});
+    ch.on('broadcast',{event:'m'},({payload})=>onNet(payload));ch.subscribe();NET={send:m=>ch.send({type:'broadcast',event:'m',payload:m}),close:()=>sb.removeChannel(ch)};return 'net'}
+  if(window.BroadcastChannel){const bc=new BroadcastChannel('pt-'+code);bc.onmessage=e=>onNet(e.data);NET={send:m=>bc.postMessage(m),close:()=>bc.close()};return 'local'}
+  return null}
+function netSend(m){if(NET&&ON)try{NET.send(Object.assign({from:ON.side,code:ON.code},m))}catch(e){}}
+function meInfo(){return{name:pName||'',kits,kchar:store.get('pt-kchar')||'orig'}}
+function onNet(m){if(!ON||m.code!==ON.code||m.from===ON.side)return;
+  if(m.t==='join'&&ON.side==='A'){ON.opp=m.me;if(!ON.started){const seed='online-'+ON.code+'-'+Math.random().toString(36).slice(2);netSend({t:'start',seed,me:meInfo()});startOnline(seed)}else netSend({t:'start',seed:ON.seed,me:meInfo()});return}
+  if(m.t==='start'&&ON.side==='B'){ON.opp=m.me;if(ON.seed!==m.seed)startOnline(m.seed);return}
+  if(m.t==='again'){if(ON.seed!==m.seed)startOnline(m.seed);return}
+  if(m.t==='look')ON.look[m.k]=m.v;
+  if(m.t==='point')ON.point[m.k]=m.v;
+  if(m.t==='shot'||m.t==='dive'){(m.t==='shot'?ON.shots:ON.dives)[m.k]=m;if(m.k<kIdx()&&ON.mine[m.k])netSend(ON.mine[m.k]);tryResolve()}
+  if(m.t==='bye'){setStatus('<b>'+t('onLeft')+'</b>')}
+}
+function startOnline(seed){ON.seed=seed;ON.started=true;ON.shots={};ON.dives={};ON.look={};ON.point={};ON.mine={};$('ovOnline').classList.remove('on');newGame('online',seed)}
+function tryResolve(){if(!online()||state!=='waitO')return;const k=kIdx(),S=ON.shots[k],D=ON.dives[k];if(!S||!D)return;
+  const sh=shooterSide(),rng=rngFor(day.seed,'on'+k),dv=diveById(D.dive),dive=concrete(dv,rng()<.5?2:3,false);
+  const out=resolveShot(S.aim[0],S.aim[1],S.steps,dive,rng);
+  if(sh===ON.side)addHist('s',[S.aim[0],S.aim[1],out.res]);else addHist('k',[D.dive,out.res]);
+  ON.look[k]=S.look;state='anim';hidePad();setStatus(diveLabel(dv)+'…');
+  startScene({sh,out,dive,tell:D.point&&D.point!=='C'?D.point:null,onEnd:()=>{(sh==='A'?A:B).push(out);nextKick()}});
+}
+setInterval(()=>{if(!ON||!NET)return;if(!ON.started&&ON.side==='B')netSend({t:'join',me:meInfo()});
+  if(online()&&state==='waitO'){const m=ON.mine[kIdx()];if(m)netSend(m)}},1500);
+function randCode(){const L='ABCDEFGHJKLMNPQRSTUVWXYZ';let c='';for(let i=0;i<4;i++)c+=L[Math.floor(Math.random()*L.length)];return c}
+function openOnline(code){$('ovMenu').classList.remove('on');$('ovOnline').classList.add('on');$('onLobby').hidden=false;$('onWait').hidden=true;$('onMsg').textContent=CFG?'':t('onNoNet');if(code){$('onCodeIn').value=code;joinRoom(code)}}
+function createRoom(){const code=randCode();ON={code,side:'A',started:false};if(!netOpen(code)){$('onMsg').textContent=t('onNoNet');return}
+  $('onLobby').hidden=true;$('onWait').hidden=false;$('onCodeShow').textContent=code}
+function joinRoom(code){code=(code||'').toUpperCase().replace(/[^A-Z]/g,'');if(code.length!==4){$('onMsg').textContent=t('onBadCode');return}
+  ON={code,side:'B',started:false};if(!netOpen(code)){$('onMsg').textContent=t('onNoNet');return}netSend({t:'join',me:meInfo()});$('onLobby').hidden=true;$('onWait').hidden=false;$('onCodeShow').textContent=code}
+$('mOnline').onclick=()=>openOnline();
+$('onCreate').onclick=createRoom;
+$('onJoin').onclick=()=>joinRoom($('onCodeIn').value);
+$('onCopy').onclick=async()=>{const u=location.origin+location.pathname+'?sala='+ON.code;try{await navigator.clipboard.writeText(u);$('onCopy').textContent='✓'}catch(e){prompt('',u)}};
+$('onCancel').onclick=()=>{if(ON&&!ON.started){netClose();ON=null}$('ovOnline').classList.remove('on');openMenu()};
+window.addEventListener('pagehide',()=>{if(online())netSend({t:'bye'})});
 function varCheck(){SND.var();
   state='var';setStatus('<b>'+t('varCheck')+'</b>');
   addFx({type:'tv',dur:1900});
@@ -729,7 +808,7 @@ function finish(d){
   const bs=$('bShare');if(bs)bs.onclick=async()=>{const ta=$('shareTxt');ta.value=share;try{await navigator.clipboard.writeText(share);bs.textContent=t('copied')}catch(e){ta.hidden=false;ta.select()}};
   $('ovEnd').classList.add('on');
   $('bToMenu').onclick=openMenu;
-  const ag=$('bAgain');if(ag)ag.onclick=()=>newGame(mode,(two()?'dous-':'adestra-')+Math.random());
+  const ag=$('bAgain');if(ag)ag.onclick=()=>{if(online()){const seed='online-'+ON.code+'-'+Math.random().toString(36).slice(2);netSend({t:'again',seed});startOnline(seed);return}newGame(mode,(two()?'dous-':'adestra-')+Math.random())};
   const bc=$('bCheat');if(bc)bc.onclick=()=>newGame('adestramento','adestra-'+Math.random(),{cheat:true});
   const bu=$('bUp');if(bu)bu.onclick=async()=>{const ni=$('upName');if(ni){pName=ni.value.trim().slice(0,16);store.set('pt-name',pName);$('pName').value=pName;$('nameA').textContent=nameOf('A')}
     if(!pName){ni&&ni.focus();return}bu.disabled=true;try{await uploadToday();bu.outerHTML='<p class="hint">'+t('rankUploaded')+'</p>'}catch(e){bu.disabled=false;bu.textContent=t('rankErr')}};
@@ -782,7 +861,8 @@ async function renderRank(){
 }
 document.querySelectorAll('#rTabs button').forEach(b=>b.onclick=()=>{rTab=b.dataset.r;renderRank()});
 $('mRank').onclick=()=>{$('ovRank').classList.add('on');renderRank()};
-$('mLab').onclick=()=>{$('ovLab').classList.add('on');runLab()};
+$('mTwo').querySelector('small').dataset.t='mTwoSub';
+$('mLab').onclick=()=>{$('ovLab').classList.add('on');showLab()};
 $('pName').value=pName;$('pName').oninput=()=>{pName=$('pName').value.trim().slice(0,16);store.set('pt-name',pName);if(day&&A)$('nameA').textContent=nameOf('A')};
 $('mBack').onclick=()=>{$('ovMenu').classList.remove('on');if(state==='pass')$('ovPass').classList.add('on')};
 function markFlag(){document.querySelectorAll('#flags button').forEach(b=>b.classList.toggle('sel',b.dataset.lang===lang))}markFlag();
@@ -793,8 +873,8 @@ function renderTexts(){
   document.querySelectorAll('[data-t]').forEach(el=>{el.textContent=t(el.dataset.t)});
   $('helpBody').innerHTML=t('help');$('pName').placeholder=t('namePh');
   document.querySelectorAll('#pad [data-l]').forEach(b=>{b.textContent=b.dataset.l.split('|').map(x=>L().dives[x]||x).join('')});
-  if(day){$('modeTag').textContent=mode==='diario'?t('modeDaily'):mode==='dous'?t('modeTwo'):t('modeTrain');
-    $('info1').textContent=two()?t('twoInfo'):t('rivalKeeper',{n:day.keeper.name});
+  if(day){$('modeTag').textContent=mode==='diario'?t('modeDaily'):mode==='dous'?t('modeTwo'):mode==='online'?t('mOnline')+(ON?' · '+ON.code:''):t('modeTrain');
+    $('info1').textContent=online()?'':two()?t('twoInfo'):t('rivalKeeper',{n:day.keeper.name});
     const d=new Date();$('info2').textContent=mode==='diario'?L().date(d.getDate(),L().months[d.getMonth()]):'';
     if(A&&B){$('nameA').textContent=nameOf('A');$('nameB').textContent=nameOf('B')}}
   const sv=store.get('pt-'+todayKey);$('mDailySub').textContent=sv?t('mDailyPlayed',{r:sv.A.filter(isGoal).length+'–'+sv.B.filter(isGoal).length}):t('mDailySub');
@@ -820,10 +900,32 @@ function renderLabChips(){
     else{[['#2b6fd1',-.22],['#d23b3b',.22],['#7b3fc4',0]].forEach(([col,dx])=>draw({p:'liso',c1:col,c2:'#151a33',sh:'#151a33',so:col},dx,.82))}
   });
 }
-$('labR').oninput=()=>{$('labRv').textContent=$('labR').value;runLab()};
+function hist(){return store.get('pt-hist')||{s:[],k:[]}}
+function addHist(kind,item){if(two()&&!online())return;const h=hist();h[kind].push(item);if(h[kind].length>400)h[kind].splice(0,h[kind].length-400);store.set('pt-hist',h)}
+let labTab='me';
+document.querySelectorAll('#labTabs button').forEach(b=>b.onclick=()=>{labTab=b.dataset.l;showLab()});
+function showLab(){document.querySelectorAll('#labTabs button').forEach(b=>b.classList.toggle('sel',b.dataset.l===labTab));$('labMe').hidden=labTab!=='me';$('labRiv').hidden=labTab!=='riv';if(labTab==='me')renderMe();else runLab()}
+function renderMe(){
+  const h=hist(),box=$('labMe');
+  if(!h.s.length&&!h.k.length){box.innerHTML='<p class="hint">'+t('meEmpty')+'</p>';return}
+  let html='<h3 style="margin:6px 0 2px;font-size:16px">'+t('meShots')+'</h3><div class="mestat">';
+  for(let r=1;r<=3;r++)for(let c=1;c<=5;c++){const l=h.s.filter(x=>x[0]===c&&x[1]===r),n=l.length,g=l.filter(x=>x[2]==='gol').length;
+    const v=n?g/n:0,bg=n?`hsl(${Math.round(Math.max(0,Math.min(1,(v-.3)/.6))*120)} 65% 38%)`:'#3b4a63';
+    html+='<div style="background:'+bg+'">'+(n?Math.round(v*100)+'%':'·')+'<small>'+(n?g+'/'+n:'')+'</small></div>'}
+  html+='</div><div class="legend"><span data-t="labHard">'+t('labHard')+'</span><i></i><span>'+t('labEasy')+'</span></div>';
+  html+='<h3 style="margin:14px 0 2px;font-size:16px">'+t('meDives')+'</h3><div class="dvlist">';
+  const ids=['altaE','mediaE','baixaE','centro','salto','altaD','mediaD','baixaD'];
+  ids.forEach(id=>{const l=h.k.filter(x=>x[0]===id),n=l.length,sv=l.filter(x=>x[1]!=='gol').length;const d=diveById(id);
+    const lab=(id.endsWith('E')?'← ':id.endsWith('D')?'→ ':'')+diveLabel(d);
+    html+='<div><span>'+lab+'</span><span style="background:rgba(128,128,160,.25);border-radius:5px"><i style="width:'+(n?Math.round(sv/n*100):0)+'%"></i></span><b>'+(n?Math.round(sv/n*100)+'%':'–')+'</b></div>'});
+  html+='</div><p class="hint" style="margin-top:8px">'+t('meDivesHint')+'</p>';
+  box.innerHTML=html;
+}
 function runLab(){
   renderLabChipsOnce();
-  const kp=labKp,rd=+$('labR').value-1,rng=mulberry32(7),N=2500,keys=Object.keys(KEEPERS);
+  $('labKdesc').innerHTML=labKp?'<b>'+L().kp[labKp][0]+':</b> '+L().kp[labKp][1]+' '+t('kr_'+labKp):t('labAllDesc');
+  $('labShoot').innerHTML=Object.keys(SHOOTERS).map(k=>'<p style="margin:0 0 6px"><b>'+L().sp[k]+':</b> '+t('sr_'+k)+'</p>').join('');
+  const kp=labKp,rd=0,rng=mulberry32(7),N=2500,keys=Object.keys(KEEPERS);
   const gauss=()=>Math.sqrt(-2*Math.log(1-rng()))*Math.cos(2*Math.PI*rng());
   const h=$('heat');h.innerHTML='';
   for(let r=1;r<=3;r++)for(let c=1;c<=5;c++){
@@ -877,6 +979,11 @@ function drawThumbs(){
   g=prep('thLab');g.fillStyle='#163d1d';g.fillRect(0,0,160,100);const vals=[61,63,56,63,61,69,69,58,69,69,67,76,63,76,67];
   for(let i=0;i<15;i++){const c=i%5,r=(i/5)|0;const v=(vals[i]-50)/30;g.fillStyle=`hsl(${Math.round(Math.max(0,Math.min(1,v))*120)} 60% 42%)`;g.fillRect(14+c*26.4,16+r*24,25,23)}
   g.strokeStyle='#fff';g.lineWidth=3;g.strokeRect(13,15,134,74);
+  g=prep('thOnline');thumbBg(g,160,100);A=ART.shooter.negra.lookR;put(g,recolored('s_negra_lookR',IM.s_negra_lookR,A.w,A.h,kits.shooter),A,A.w/2,A.h,45,98,.19,false);
+  A=ART.keeper.roxo.point;put(g,recolored('k_roxo_point',IM.k_roxo_point,A.w,A.h,P2_KITS.keeper),A,A.w/2,A.h,118,92,.2,true);
+  g.fillStyle='#fff';g.strokeStyle='#151a33';g.lineWidth=3;g.font='800 22px Rubik, system-ui, sans-serif';g.textAlign='center';g.textBaseline='middle';g.strokeText('⇄',80,40);g.fillText('⇄',80,40);
+  g=prep('thRank');g.fillStyle='#3a2a05';g.fillRect(0,0,160,100);[[58,40,'#c0c0c0','2'],[80,24,'#ffd23f','1'],[102,52,'#cd7f32','3']].forEach(([x,y,c,n])=>{g.fillStyle=c;g.fillRect(x-11,y+10,22,90-y-10);g.fillStyle='#151a33';g.font='800 16px Rubik, system-ui, sans-serif';g.textAlign='center';g.fillText(n,x,y+24)});
+  const bb2=ART.balls[ballSel]||ART.balls.clasico;g.drawImage(ballCanvas(ballSel),70,6,20,20*bb2.h/bb2.w);
 }
 function drawPrev(){const pc=$('prev');const w=pc.clientWidth||300,dpr=Math.min(3,devicePixelRatio||1);pc.width=Math.round(w*dpr);pc.height=Math.round(w*dpr*0.56);const k=pc.width/100;
   const main=ctx;ctx=pc.getContext('2d');ctx.setTransform(k,0,0,k,0,0);ctx.imageSmoothingQuality='high';
@@ -938,7 +1045,7 @@ const POOL_F_S=['negra','coleta','asiatica','platino'],POOL_M_S=['orig','roxo','
 const POOL_F_K=['negra','coleta','asiatica','platino'],POOL_M_K=['orig','roxo','platino'];
 function charOfPerson(o,isK){const pool=o.fi<12?(isK?POOL_F_K:POOL_F_S):(isK?POOL_M_K:POOL_M_S);return pool[(o.fi*3+o.si)%pool.length]}
 function shooterChar(side,idx){if(!two()&&side==='B')return charOfPerson(day.shooters[Math.min(idx,day.shooters.length-1)],false);return CH_S[(idx+(side==='A'?0:4))%CH_S.length]}
-function keeperChar(side){if(!two()&&side==='B')return charOfPerson(day.keeper,true);return side==='A'?(store.get('pt-kchar')||'orig'):'negra'}
+function keeperChar(side){if(online())return side===ON.side?(store.get('pt-kchar')||'orig'):((ON.opp&&ON.opp.kchar)||'negra');if(!two()&&side==='B')return charOfPerson(day.keeper,true);return side==='A'?(store.get('pt-kchar')||'orig'):'negra'}
 // ---------- porteiro ----------
 function drawKeeper(p,kit,scale,ch){
   ch=ch||'orig';const A=ART.keeper[ch][p.pose];const cnv=recolored('k_'+ch+'_'+p.pose,IM['k_'+ch+'_'+p.pose],A.w,A.h,kit);
@@ -1202,8 +1309,21 @@ function shooterFrame(s){
 
 // ---------- bucle ----------
 let last=performance.now();
+let CROWD=null;
+function crowdSpots(){const rr=mulberry32(4242),CY=(360-BGY0)*BGK,out=[];
+  while(out.length<140){const x=rr()*W,y=2+rr()*(CY-4);if(x>GX0-4&&x<GX1+4&&y>GY0-2)continue;out.push([x,y,rr()*6.28,['#ffd23f','#d23b3b','#2b6fd1','#ffffff','#2fa84f','#ff8a1f'][out.length%6],rr()])}return out}
+function drawCrowd(now){
+  if(!CROWD)CROWD=crowdSpots();const cyc=now%22000,wave=cyc<3200?cyc/3200*(W+60)-30:-999;
+  for(const[x,y,ph,col,r]of CROWD){
+    let up=Math.max(0,Math.sin(now/650+ph*3)-.82)*9;          // brazos e bufandas soltos
+    const dw=Math.abs(x-wave);if(dw<22)up=Math.max(up,(1-dw/22)*2.8);   // a ola
+    if(up>.15){ctx.fillStyle=col;ctx.fillRect(x,y-up,1.2,up+.3);if(r<.3){ctx.fillRect(x-1,y-up,3.2,1)}}
+    if(r>.985&&Math.sin(now/90+ph*7)>.97){ctx.fillStyle='#fff';ctx.fillRect(x-1,y-.25,2,.5);ctx.fillRect(x-.25,y-1,.5,2)}  // flash
+  }
+}
 function drawBg(now,cel){
   const k=S;ctx.drawImage(IM.bg,0,0,IM.bg.naturalWidth,IM.bg.naturalHeight,0,0,W,H);
+  drawCrowd(now);
 
 }
 function frame(now){
@@ -1235,7 +1355,9 @@ function frame(now){
   if(state==='power'&&aimCell){const on=Math.floor(now/180)%2;ctx.strokeStyle=on?'#ffd23f':'#fff';ctx.lineWidth=1.2;ctx.strokeRect(cellX(aimCell[0])+1,cellY(aimCell[1])+1,CW-2,CH-2);
     const x=cx(aimCell[0]),y=cy(aimCell[1]);ctx.strokeStyle='#ffd23f';ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.moveTo(x-6,y);ctx.lineTo(x+6,y);ctx.moveTo(x,y-6);ctx.lineTo(x,y+6);ctx.stroke()}
 
-  const kp=scene?keeperPose(scene,now):idlePose(state==='keep'?(lookSel==='C'?null:lookSel):state==='keep2'?null:viewTell,now);
+  let kpTell=state==='keep'?(lookSel==='C'?null:lookSel):state==='keep2'?null:viewTell;
+  if(online()&&!scene){const meK=shooterSide()!==ON.side,v=meK?lookSel:ON.point[kIdx()];kpTell=v&&v!=='C'?v:null}
+  const kp=scene?keeperPose(scene,now):idlePose(kpTell,now);
   const ksc=adv?1.12:1;if(adv)kp.y+=7;
   const bs=scene?ballState(scene):{x:SPOT[0],y:SPOT[1]-2.5,r:3.6,st:0};
   if(bs.behind)drawBall(bs.x,bs.y,bs.r,0);
@@ -1255,7 +1377,8 @@ function frame(now){
     const num=scene?scene.num:((ss==='A'||two())?((ss==='A'?A:B).length%11)+1:day.shooters[B.length].dorsal);
     let f=scene?shooterFrame(scene):{fr:'stand'};
     const LK={L:'lookL',R:'lookR',C:'lookC'};
-    if(!scene&&state==='keep'){const tl=day.rounds[B.length].shot.tell;f={fr:LK[tl]||'stand'}}
+    if(!scene&&state==='keep'&&!online()){const tl=day.rounds[B.length].shot.tell;f={fr:LK[tl]||'stand'}}
+    if(!scene&&online()&&state!=='end'){const meS=shooterSide()===ON.side;f={fr:LK[meS?lookSel:(ON.look[kIdx()]||'C')]}}
     if(!scene&&(state==='aim'||state==='power'))f={fr:LK[lookSel]};
     if(!scene&&(state==='keep2'||state==='pass')&&pending)f={fr:LK[pending.look]};
     drawShooter(f.fr,kitOf(ss).shooter,num,f.off,scene?scene.schar:shooterChar(ss,(ss==='A'?A:B).length));
@@ -1273,7 +1396,7 @@ function frame(now){
 }
 
 function boot(){await0();}
-async function await0(){await loadAll();markSnd();$('logoTop').src=ART.logo.src;$('logoMenu').src=ART.logo.src;document.documentElement.style.setProperty('--menubg','url('+ART.bg.src+')');resize();day=decorate(makeDay('once-'+todayKey));A=[];B=[];rivalKits=makeRivalKits('once-'+todayKey);renderTexts();openMenu();if(!store.get('om-visto2')){store.set('om-visto2',1)}requestAnimationFrame(frame)}
+async function await0(){await loadAll();setTimeout(()=>{const sp=new URLSearchParams(location.search).get('sala');if(sp)openOnline(sp)},300);markSnd();$('logoTop').src=ART.logo.src;$('logoMenu').src=ART.logo.src;document.documentElement.style.setProperty('--menubg','url('+ART.bg.src+')');resize();day=decorate(makeDay('once-'+todayKey));A=[];B=[];rivalKits=makeRivalKits('once-'+todayKey);renderTexts();openMenu();if(!store.get('om-visto2')){store.set('om-visto2',1)}requestAnimationFrame(frame)}
 (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(boot);
 })();
 </script>

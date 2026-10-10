@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PENALTITO · Ranking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#141a3a;--ink:#eef0ff;--soft:#9aa3cf;--row:rgba(255,255,255,.06);--gold:#ffd23f}
+body.light{--bg:#ffffff;--ink:#151a33;--soft:#5a6283;--row:rgba(20,26,58,.05)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Rubik",system-ui,sans-serif;font-size:15px}
+.wrap{padding:10px 12px;max-width:520px;margin:0 auto}
+h1{font-size:17px;font-weight:800;margin:0 0 6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+h1 a{color:var(--gold);text-decoration:none;font-size:14px}
+.tabs{display:flex;gap:4px;margin-bottom:8px}
+.tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;padding:5px 2px;border:0;border-radius:6px;background:var(--row);color:var(--ink);cursor:pointer}
+.tabs button.sel{background:var(--gold);color:#151a33}
+table{width:100%;border-collapse:collapse}
+td{padding:6px 4px}
+tr:nth-child(odd) td{background:var(--row)}
+td.n{width:2em;font-weight:800;color:var(--soft)}
+td.p{text-align:right;font-weight:800}
+td.s{text-align:right;color:var(--soft);font-size:12px;white-space:nowrap}
+.hint{color:var(--soft);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span>⚽ PENALTITO</span><a id="play" href="./" target="_top"></a></h1>
+  <div class="tabs" id="tabs"></div>
+  <div id="list" class="hint">…</div>
+</div>
+<script src="config.js" onerror=""></script>
+<script>
+(function(){
+const q=new URLSearchParams(location.search);
+const T={gl:{day:'Hoxe',week:'Semana',month:'Mes',all:'Sempre',play:'Xogar →',empty:'Aínda non hai ninguén.',err:'Non se puido cargar o ranking.',cfg:'Falta configurar config.js.'},
+ es:{day:'Hoy',week:'Semana',month:'Mes',all:'Siempre',play:'Jugar →',empty:'Todavía no hay nadie.',err:'No se pudo cargar el ranking.',cfg:'Falta configurar config.js.'},
+ ca:{day:'Avui',week:'Setmana',month:'Mes',all:'Sempre',play:'Jugar →',empty:'Encara no hi ha ningú.',err:'No s’ha pogut carregar el rànquing.',cfg:'Falta configurar config.js.'},
+ eu:{day:'Gaur',week:'Astea',month:'Hilabetea',all:'Beti',play:'Jokatu →',empty:'Oraindik ez dago inor.',err:'Ezin izan da sailkapena kargatu.',cfg:'config.js konfiguratu behar da.'}};
+const lang=T[q.get('lang')]?q.get('lang'):'gl',L=T[lang],N=Math.min(50,+q.get('n')||10);
+if(q.get('theme')==='light')document.body.classList.add('light');
+if(q.get('tabs')==='0')document.getElementById('tabs').style.display='none';
+document.getElementById('play').textContent=L.play;
+const ALIAS={hoxe:'day',hoy:'day',avui:'day',gaur:'day',semana:'week',setmana:'week',astea:'week',mes:'month',hilabetea:'month',sempre:'all',siempre:'all',beti:'all'};
+let tab=ALIAS[q.get('p')]||q.get('p')||'day';if(!L[tab])tab='day';
+const CFG=window.PENALTITO_CONFIG;
+const dkey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function from(t){const d=new Date();if(t==='week'){d.setDate(d.getDate()-((d.getDay()+6)%7))}else if(t==='month')d.setDate(1);else if(t==='all')return '2026-01-01';return dkey(d)}
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function tabs(){const el=document.getElementById('tabs');el.innerHTML='';['day','week','month','all'].forEach(k=>{const b=document.createElement('button');b.textContent=L[k];if(k===tab)b.className='sel';b.onclick=()=>{tab=k;tabs();load()};el.appendChild(b)})}
+async function load(){const box=document.getElementById('list');
+  if(!CFG||!CFG.url||!CFG.key){box.textContent=L.cfg;return}
+  box.textContent='…';
+  try{const f=from(tab);const r=await fetch(CFG.url.replace(/\/$/,'')+'/rest/v1/pt_reto?select=uid,nome,puntos,gf,paradas&dia=gte.'+f+(tab==='day'?'&dia=eq.'+f:'')+'&order=puntos.desc,creado.asc&limit=3000',{headers:{apikey:CFG.key,Authorization:'Bearer '+CFG.key}});
+    if(!r.ok)throw 0;const rows=await r.json();const agg={};
+    rows.forEach(x=>{const a=agg[x.uid]||(agg[x.uid]={nome:x.nome,p:0,g:0,s:0,n:0});a.p+=x.puntos;a.g+=x.gf;a.s+=x.paradas;a.n++;a.nome=x.nome});
+    const list=Object.values(agg).sort((a,b)=>b.p-a.p).slice(0,N);
+    if(!list.length){box.textContent=L.empty;return}
+    box.className='';box.innerHTML='<table>'+list.map((a,i)=>'<tr><td class="n">'+(i+1)+'</td><td>'+esc(a.nome)+'</td><td class="s">⚽'+a.g+' 🧤'+a.s+(tab!=='day'?' · '+a.n+'×':'')+'</td><td class="p">'+a.p+'</td></tr>').join('')+'</table>';
+  }catch(e){box.className='hint';box.textContent=L.err}}
+tabs();load();
+})();
+</script>
+</body>
+</html>
